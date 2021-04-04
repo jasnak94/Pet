@@ -31,6 +31,7 @@
           [:li {:class ""}[:a {:href "#hero"} "Početna strana"]]
            [:li [:a {:href "#about"} "O portalu"]]
            [:li [:a {:href "#services"} "Usluge"]]
+           [:li [:a {:href "#portfolio"} "Oglasi"]]
         ]
       ]
     ]
@@ -41,6 +42,8 @@
     (s/about)
     (s/facts)
     (s/services)
+    (s/portfolio)
+    (s/nestanak)
     ]
     
     [:footer {:id "footer"}

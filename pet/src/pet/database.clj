@@ -21,3 +21,6 @@
 (defn brNasilja []
    (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavanasilja"]))
 )
+(defn vrstaZivotinje []
+  (into [] (sql/query connection ["SELECT * FROM vrstazivotinje"]))
+  )
