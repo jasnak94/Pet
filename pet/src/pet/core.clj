@@ -39,6 +39,7 @@
     
     [:main {:id "main"}
     (s/about)
+    (s/facts)
     (s/services)
     ]
     

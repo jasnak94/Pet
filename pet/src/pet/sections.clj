@@ -1,4 +1,7 @@
-(ns pet.sections)
+(ns pet.sections
+  (:require [pet.database :as db]
+            )
+  )
 
 (defn hero []
   [:section {:id "hero"}
@@ -76,4 +79,46 @@
                ]
              ]
      ]
+  )
+
+(defn facts []
+      [:section {:id "facts"}
+      [:div {:class "container wow fadeIn"}
+        [:div {:class "section-header"}
+          [:h3 {:class "section-title"} "Statistika prijava"]
+          [:p {:class "section-description"}]
+        ]
+        [:div {:class "row counters"}
+
+          [:div {:class "col-lg-4 col-6 text-center"}
+           [:span {:data-toggle "counter-up"}
+            (map 
+          (fn [nesto]
+            (:ukupno nesto)
+            ) (db/brNestanka))
+             ]
+            [:p "Broj oglasa nestanka"]
+  				]
+
+          [:div {:class "col-lg-4 col-6 text-center"}
+           [:span {:data-toggle "counter-up"} 
+            (map 
+          (fn [nesto]
+            (:ukupno nesto)
+            ) (db/brNasilja))
+             ]
+            [:p "Broj prijava nasilja nad životinjama"]
+  				]
+          [:div {:class "col-lg-4 col-6 text-center"}
+           [:span {:data-toggle "counter-up"} 
+            (map 
+          (fn [nesto]
+            (:ukupno nesto)
+            ) (db/brPronalaska))
+             ]
+            [:p "Broj slučajeva vraćenih ljubimaca vlasnicima"]
+  				]
+          ]
+        ]
+      ]
   )
