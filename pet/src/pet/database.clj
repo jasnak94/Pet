@@ -9,18 +9,31 @@
    :user "root"
    :password ""})
 
-(defn brKorisnika []
-   (into [] (sql/query connection ["SELECT count(*) as ukupno FROM novikorisnik"]))
-)
 (defn brNestanka []
    (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavanestanka"]))
 )
+
 (defn brPronalaska []
    (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavapronalaska"]))
 )
-(defn brNasilja []
-   (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavanasilja"]))
-)
+
 (defn vrstaZivotinje []
   (into [] (sql/query connection ["SELECT * FROM vrstazivotinje"]))
-  )
+)
+
+(defn rase []
+  (into [] (sql/query connection ["SELECT * FROM rasa"]))
+)
+
+(defn dodajNestanak [mestonestanka]
+     (sql/insert! connection :prijavanestanka [:ulicaGrad :datumPrijave :zivotinjaid] 
+                  [mestonestanka (java.time.LocalDateTime/now) 
+                  (first (vals (get (into [] (sql/query connection ["SELECT * FROM zivotinja ORDER BY id DESC LIMIT 1"])) 0)))
+                    ]
+      )
+)
+
+(defn dodajZivotinju [vrsta rasa pol bdlaka vdlaka brcip sterilisana pobelezja]
+  (sql/insert! connection :zivotinja [:ime :pol :bojaDlake :vrstaDlake :brojCipa :sterilisana :posebnaObelezja :IDRase] 
+               [vrsta pol bdlaka vdlaka brcip sterilisana pobelezja rasa])
+)

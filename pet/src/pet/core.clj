@@ -4,9 +4,11 @@
             [hiccup.page :refer [html5 include-css]]
             [compojure.core :refer [defroutes ANY]]
             [compojure.route :as route]
+            [ring.util.response :as ring]
             [compojure.core :refer [defroutes GET POST]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [pet.sections :as s])
+            [pet.sections :as s]
+            [pet.database :as db])
   )
 
  (defn index []
@@ -63,8 +65,16 @@
    ])
   )
 
+ (defn dodajNestanak [vrsta rasa pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja]
+   
+  (db/dodajZivotinju vrsta rasa pol bdlaka vdlaka brcip sterilisana pobelezja)
+  (db/dodajNestanak mestonestanka)
+   (ring/redirect "/")
+  )
+ 
 (defroutes routes
  (GET "/" [] (index))
+ (POST "/add" [vrsta rasa pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja] (dodajNestanak vrsta rasa pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja))
  (route/resources "/"))
 
 (def foo
