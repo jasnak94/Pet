@@ -118,7 +118,7 @@
       ]
   )
 
-(defn formaNestanak [vrste rase]
+(defn formaNestanak [vrste]
    [:form { :method "post" :action "/add" :id "fileForm" :enctype "multipart/form-data"}
      [:div {:class "form-group"} 
       [:label {:for "vrsta"}[:span {:class "req"}]"Vrsta životinje:"]   
@@ -128,9 +128,7 @@
       ]
      [:div {:class "form-group"}
        [:label {:for "rasa"}[:span {:class "req"}]"Rasa:"] 
-       [:select {:name "rasa" :class "form-control"}
-       (map (fn [rasa]
-                 [:option {:value (:id rasa) } (:rasa rasa)]) rase)]
+       [:input {:class "form-control" :type "text" :name "rasa" :id "rasa"}]
       ]
      
      [:div {:class "form-group"}   
@@ -193,7 +191,7 @@
   [:div {:class "row"}
         [:div {:class "col-md-10"}
 
-(formaNestanak (db/vrstaZivotinje) (db/rase))
+(formaNestanak (db/vrstaZivotinje))
       ]
    ]
   ]]]]
@@ -214,7 +212,7 @@
         [:div {:class "details"}
                 [:h4 (:status oglas) ]
                 [:h4 (:ime oglas) ] 
-                [:span (:rasa oglas)]
+                [:span (str (:vrsta oglas) " " (:rasa oglas))] 
                 [:h6 (str "LOKACIJA: " (:mesto oglas)) ]
           ]]
              ) (db/vratioglase))
