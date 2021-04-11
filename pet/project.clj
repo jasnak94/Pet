@@ -13,6 +13,8 @@
                  [ring/ring-core "1.9.2"]
                  [ring-json-response "0.2.0"]
                  [compojure "1.4.0"]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [org.clojure/clojure-contrib "1.2.0"]
+                 [enlive "1.1.6"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring { :handler pet.core/foo})

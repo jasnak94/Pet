@@ -1,6 +1,7 @@
 (ns pet.sections
   (:require [pet.database :as db]
             [hiccup.form :as form]
+            [hiccup.element :refer (link-to image)]
             [ring.util.anti-forgery :as anti-forgery]
             )
   )
@@ -106,13 +107,19 @@
             [:p "Broj slučajeva vraćenih ljubimaca vlasnicima"]
   				]
           ]
+        
+        ; FORMA ZA PROBU UCITAVANJA SLIKE
+    ;    [:form { :method "post" :action "/file" :enctype "multipart/form-data"}
+   ; [:input {:name "file" :type "file"}]
+  ;  [:input {:type "submit" :name "submit" :value "submit"}]
+ ; ]
+        ;
         ]
       ]
   )
 
 (defn formaNestanak [vrste rase]
-  (form/form-to [:post "/add"]
-    (anti-forgery/anti-forgery-field)
+   [:form { :method "post" :action "/add" :id "fileForm" :enctype "multipart/form-data"}
      [:div {:class "form-group"} 
       [:label {:for "vrsta"}[:span {:class "req"}]"Vrsta životinje:"]   
       [:select {:name "vrsta" :class "form-control"}
@@ -167,10 +174,12 @@
       [:label {:for "posebnaObelezja"}[:span {:class "req"}] "Posebna obeležja:"] 
       [:input {:class "form-control" :type "text" :name "pobelezja" :id "pobelezja" :placeholder "Navesti ukratko"}]  
     ]
+    [:img {:id "uploadPreview" :src (str "img/" "gif.gif") :class "" :width "250px" :height "200px"}][:br]
+     [:input {:type "file" :id "imglink" :name "file" :size "20"}]
     [:div {:class "form-group"}
       [:input {:class "btn btn-success" :type "submit" :name "prijava_nestanak" :value "Prijavi nestanak"}]
     ]
-  )
+] ; )
   )
 
 (defn nestanak []
@@ -197,14 +206,19 @@
           [:h3  {:class "section-title"}"Oglasi korisnika"]
           [:p {:class "section-description"}"Skorašnji oglasi koji su korisnici postavljali"]
         ]
-        [:div {:class "row"}
-          [:div {:class "col-lg-12"}
-            [:ul {:id "portfolio-flters"}
-              [:li {:data-filter ".filter-app, .filter-card, .filter-logo, .filter-web" :class "filter-active"}"Svi oglasi"]
-              [:li {:data-filter ".filter-app"}"Nestanak"]
-              ]
-          ]
+        [:div {:class "row" :id "portfolio-wrapper"}
+         (map 
+           (fn [oglas]           
+              [:div {:class "col-lg-3 col-md-6 portfolio-item filter-app"}
+        [:img {:src (str "img/zivotinje/" (:slika oglas)) }]
+        [:div {:class "details"}
+                [:h4 (:status oglas) ]
+                [:h4 (:ime oglas) ] 
+                [:span (:rasa oglas)]
+                [:h6 (str "LOKACIJA: " (:mesto oglas)) ]
+          ]]
+             ) (db/vratioglase))
+         ]
         ]
-      ]
    ]
 )
