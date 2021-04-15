@@ -15,7 +15,7 @@
             )
   )
 
- (defn index []
+ (defn index [about facts services portfolio nestanak pregled idnestanka]
   (h/html5
     [:head
      [:title "PetPROTECTORS"]
@@ -44,11 +44,13 @@
   ]
    (s/hero)
     [:main {:id "main"}
-    (s/about)
-    (s/facts)
-    (s/services)
-    (s/portfolio)
-    (s/nestanak)
+    (if (= about true) (s/about))
+    (if (= facts true) (s/facts))
+    (if (= services true) (s/services))
+    (if (= portfolio true)(s/portfolio))
+    (if (= nestanak true)(s/nestanak))
+    
+    (if (= pregled true) (s/pregled idnestanka))
     ]
     
     [:footer {:id "footer"}
@@ -85,10 +87,11 @@
   )
  
 (defroutes routes
- (GET "/" [] (index))
+ (GET "/" [] (index true true true true true false 0))
  (mp/wrap-multipart-params
  (POST "/add" [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file] (dodajNestanak vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file))
  )
+ (GET "/view" [idnestanka] (index false false false false false true idnestanka))
  (route/resources "/"))
 
 (def foo

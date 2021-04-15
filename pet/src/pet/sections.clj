@@ -209,7 +209,13 @@
            (fn [oglas]           
               [:div {:class "col-lg-3 col-md-6 portfolio-item filter-app"}
         [:img {:src (str "img/zivotinje/" (:slika oglas)) }]
+         
         [:div {:class "details"}
+        [:form { :method "get" :action "/view" :id "fileForm" :enctype "multipart/form-data"}
+        [:input {:class "form-control" :type "hidden" :name "idnestanka" :id "idnestanka" :value (:id oglas)}] 
+        [:input {:class "btn" :type "submit" :name "otvori" :value "Otvori oglas"}]
+
+        ]
                 [:h4 (:status oglas) ]
                 [:h4 (:ime oglas) ] 
                 [:span (str (:vrsta oglas) " " (:rasa oglas))] 
@@ -220,3 +226,59 @@
         ]
    ]
 )
+
+(defn pregled [id]
+  [:section {:id "portfolio"}
+     [:div {:class "container wow fadeIn"}
+      (map (fn [nestanak] 
+      [:div {:class "row"}
+       [:div {:class "col-lg-6 col-md-6"}
+          [:img {:src (str "img/zivotinje/" (:slika nestanak)) :height "400em"}]
+              ]
+      [:div {:class "col-lg-6 col-md-6"}
+        [:div {:class "details"}
+         [:h4 "NESTALA ŽIVOTINJA"]
+         [:h5 "Informacije:"]
+          [:h6 (str (:vrsta nestanak) " " (:ime nestanak))]           
+           [:h6 (str "Rasa: " (:rasa nestanak)) ] 
+           [:h6 (str "Pol: " (:pol nestanak)) ] 
+           [:h6 (str "Status: " (:status nestanak)) ] 
+           [:h6 (str "Boja dlake: " (:bdlake nestanak)) ] 
+           [:h6 (str "Vrsta dlake: " (:vdlake nestanak)) ] 
+           [:h6 (str "Posebna obeležja: " (:pobelezja nestanak)) ] 
+           [:h6 (str "Broj čipa: " (:brcipa nestanak)) ] 
+           [:h6 (str "Kontakt: " (:kontakt nestanak)) ] 
+           [:h6 (str "Datum prijave: " (:datum nestanak)) ] 
+           [:h6 (str "Lokacija: " (:mesto nestanak)) ]
+          ]
+        [:h5 "Akcije:"]
+                [:div {:class "row"}
+                 
+         [:div {:class "col-lg-6 col-md-6"}
+        [:form {:action "/delete" :method "post"}
+         [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
+         [:div {:class "form-group"}
+          [:label {:for "sifra"}[:span {:class "req"}] "Šifra za brisanje oglasa:"] 
+          [:input {:class "form-control" :type "text" :name "sifra" :required "true" :placeHolder "šifra oglasa"}]
+          ]
+         [:input {:type "submit" :class "btn btn-get-started" :name "brisanje" :value "Obrišite oglas"}]
+         ]
+        ]
+         [:div {:class "col-lg-6 col-md-6"}
+      [:form {:action "/izmena" :method "post"}
+       [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
+        [:div {:class "form-group"}
+          [:label {:for "sifra"}[:span {:class "req"}] "Šifra za izmenu oglasa:"] 
+          [:input {:class "form-control" :type "text" :name "sifra" :required "true" :placeHolder "šifra oglasa"}]
+          ]
+         [:input {:type "submit" :class "btn btn-get-started" :name "brisanje" :value "Izmenite oglas"}]
+         ]
+        ]
+         ] 
+        ]
+      ]
+             ) (db/vratiNestanak id))
+  
+]
+]
+  )
