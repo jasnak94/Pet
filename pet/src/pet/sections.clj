@@ -6,16 +6,8 @@
             )
   )
 
-(defn hero []
-  [:section {:id "hero"}
-     [:div {:class "hero-container"}
-       [:h3 "Dobrodošli na portal pomoći vašim izgubljenim ljubimcima"]
-       [:h4 "Tu smo da povratimo vaše voljene drugare"]
-       [:a {:href "#about" :class "btn-get-started"} "Upoznajte se sa nama"]
-     ]
-   ]
-  )
-(defn about []
+(defn pocetna []
+  [:div 
   [:section {:id "about"}
       [:div {:class "container"}
         [:div {:class "row about-container"}
@@ -49,10 +41,7 @@
         ]
       ]
     ]
-  )
-
-(defn services []
-      [:section {:id "services"}
+   [:section {:id "services"}
      [:div {:class "container wow fadeIn"}
         [:div {:class "section-header"}
                [:h3 {:class "section-title"}"Usluge"]
@@ -76,10 +65,8 @@
                ]
              ]
      ]
-  )
-
-(defn facts []
-      [:section {:id "facts"}
+   
+   [:section {:id "facts"}
       [:div {:class "container wow fadeIn"}
         [:div {:class "section-header"}
           [:h3 {:class "section-title"} "Statistika prijava"]
@@ -107,15 +94,9 @@
             [:p "Broj slučajeva vraćenih ljubimaca vlasnicima"]
   				]
           ]
-        
-        ; FORMA ZA PROBU UCITAVANJA SLIKE
-    ;    [:form { :method "post" :action "/file" :enctype "multipart/form-data"}
-   ; [:input {:name "file" :type "file"}]
-  ;  [:input {:type "submit" :name "submit" :value "submit"}]
- ; ]
-        ;
         ]
       ]
+   ]
   )
 
 (defn formaNestanak [vrste]
@@ -168,6 +149,14 @@
       [:label {:for "mestoNestanka"}[:span {:class "req"}] "Mesto nestanka:"]
       [:input {:class "form-control" :type "text" :name "mestonestanka" :id "pobelezja"}] 
     ]
+     [:div {:class "form-group"}
+       [:label {:for "kontakt"}[:span {:class "req"}] "Kontakt:"]
+       [:input {:class "form-control" :type "text" :name "kontakt" :id "kontakt" :placeholder "" :required "true"}] 
+     ]
+      [:div {:class "form-group"}
+       [:label {:for "sifra"}[:span {:class "req"}] "Šifra za vaš oglas:"]
+       [:input {:class "form-control" :type "text" :name "sifra" :id "sifra" :placeholder "" :required "true"}] 
+     ]
     [:div {:class "form-group"}
       [:label {:for "posebnaObelezja"}[:span {:class "req"}] "Posebna obeležja:"] 
       [:input {:class "form-control" :type "text" :name "pobelezja" :id "pobelezja" :placeholder "Navesti ukratko"}]  
@@ -211,7 +200,7 @@
         [:img {:src (str "img/zivotinje/" (:slika oglas)) }]
          
         [:div {:class "details"}
-        [:form { :method "post" :action "/" :id "fileForm"}
+        [:form { :method "post" :action "/pregled" :id "fileForm"}
         [:input {:class "form-control" :type "hidden" :name "idnestanka" :id "idnestanka" :value (:id oglas)}] 
         [:input {:class "btn" :type "submit" :name "otvori" :value "Otvori oglas"}]
 
@@ -228,16 +217,17 @@
 )
 
 (defn pregled [id]
+  [:div
   [:section {:id "portfolio"}
      [:div {:class "container wow fadeIn"}
       (map (fn [nestanak] 
       [:div {:class "row"}
-       [:div {:class "col-lg-6 col-md-6"}
-          [:img {:src (str "img/zivotinje/" (:slika nestanak)) :height "400em"}]
+       [:div {:class "col-lg-6 col-md-6 text-left"}
+        [:h4 "NESTALA ŽIVOTINJA"]
+          [:img {:src (str "img/zivotinje/" (:slika nestanak)) :height "300em"}]
               ]
       [:div {:class "col-lg-6 col-md-6"}
         [:div {:class "details"}
-         [:h4 "NESTALA ŽIVOTINJA"]
          [:h5 "Informacije:"]
           [:h6 (str (:vrsta nestanak) " " (:ime nestanak))]           
            [:h6 (str "Rasa: " (:rasa nestanak)) ] 
@@ -254,7 +244,7 @@
         [:h5 "Akcije:"]
                 [:div {:class "row"}
                  
-         [:div {:class "col-lg-6 col-md-6"}
+         [:div {:class "col-lg-6 col-md-6 text-right"}
         [:form {:action "/delete" :method "post"}
          [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
          [:input {:type "hidden" :class "btn btn-get-started" :name "zid" :value (:zid nestanak)}]
@@ -266,7 +256,7 @@
          ]
         ]
          [:div {:class "col-lg-6 col-md-6"}
-      [:form {:action "/izmena" :method "post"}
+      [:form {:action "/izmena" :method "get"}
        [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
        [:input {:type "hidden" :class "btn btn-get-started" :name "zid" :value (:zid nestanak)}]
         [:div {:class "form-group"}
@@ -282,5 +272,5 @@
              ) (db/vratiNestanak id))
   
 ]
-]
+]]
   )

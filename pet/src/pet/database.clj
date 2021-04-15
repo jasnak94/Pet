@@ -21,11 +21,11 @@
   (into [] (sql/query connection ["SELECT * FROM vrstazivotinje"]))
 )
 
-(defn dodajNestanak [mestonestanka]
-     (sql/insert! connection :prijavanestanka [:ulicaGrad :datumPrijave :zivotinjaid] 
+(defn dodajNestanak [mestonestanka kontakt sifra]
+     (sql/insert! connection :prijavanestanka [:ulicaGrad :datumPrijave :zivotinjaid :kontakt :sifra] 
                   [mestonestanka (java.time.LocalDateTime/now) 
                   (first (vals (get (into [] (sql/query connection ["SELECT id FROM zivotinje ORDER BY id DESC LIMIT 1"])) 0)))
-                    ]
+                    kontakt sifra ]
       )
 )
 

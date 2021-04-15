@@ -8,6 +8,7 @@
             [compojure.core :refer [defroutes GET POST]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [pet.sections :as s]
+            [pet.template :as t]
             [pet.database :as db]
             [clojure.java.io :as io]
             [clojure.contrib [duck-streams :as ds]]
@@ -15,59 +16,24 @@
             )
   )
 
- (defn index [about facts services portfolio nestanak pregled idnestanka]
-  (h/html5
-    [:head
-     [:title "PetPROTECTORS"]
-     (include-css "/css/style.css" "/css/RegCss.css" "/css/bootstrap.min.css"
-                  "/css/font-awesome.min.css" "/css/animate.min.css" "/css/jquery-ui.min.css"
-                  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
-     ]
-    [:body {:class "homepage"}
-      [:header {:id "header"}
-    [:div {:class "container"}
+ (defn pocetna []
+  (t/view (s/pocetna))
+)
+ 
+(defn pregledOglasa [id]
+  (t/view (s/pregled id))
+  )
 
-      [:div {:id "logo" :class "pull-left"}
-        [:a {:href "#hero"}]
-        [:h3 [:a {:href  "#hero"}"PetProtectors"]]
-        ]
+(defn oglasi []
+  (t/view (s/portfolio))
+  )
 
-      [:nav {:id "nav-menu-container"}
-        [:ul {:class "nav-menu"}
-          [:li {:class ""}[:a {:href "/#hero"} "Početna strana"]]
-           [:li [:a {:href "/#about"} "O portalu"]]
-           [:li [:a {:href "/#services"} "Usluge"]]
-           [:li [:a {:href "/#portfolio"} "Oglasi"]]
-        ]
-      ]
-    ]
-  ]
-   (s/hero)
-    [:main {:id "main"}
-    (if (= about true) (s/about))
-    (if (= facts true) (s/facts))
-    (if (= services true) (s/services))
-    (if (= portfolio true)(s/portfolio))
-    (if (= nestanak true)(s/nestanak))
-    
-    (if (= pregled true) (s/pregled idnestanka))
-    ]
-    
-    [:footer {:id "footer"}
-    [:div {:class "footer-top"}
-      [:div {:class "container"}
+(defn prijavaNestanka []
+  (t/view (s/nestanak))
+  )
 
-      ]
-    ]
-
-    [:div {:class "container"}
-      [:div {:class "copyright"}
-        "&copy; Copyright " [:strong "petPROTECTORS"]".Sva prava zadržana"
-      ]
-      
-    ]
-  ]
-   ])
+(defn izmenaNestanka [id]
+  (t/view (s/nestanak))
   )
 
 (defn upload-file [file naziv]
@@ -78,25 +44,31 @@
    ))
  )
 
- (defn dodajNestanak [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja imgLink]
+ (defn dodajNestanak [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka  kontakt sifra pobelezja imgLink]
    (def naziv (str (str pol (str ime vrsta)) ".jpg"))
    (upload-file imgLink naziv)
   (db/dodajZivotinju vrsta rasa ime pol bdlaka vdlaka brcip sterilisana pobelezja naziv "NESTALA")
-  (db/dodajNestanak mestonestanka)
-   (ring/redirect "/")
+  (db/dodajNestanak mestonestanka kontakt sifra)
+   (ring/redirect "/oglasi")
   )
  
  (defn obisiNestanak [id zid]
   (db/obrisiNestanak id zid)
-   (ring/redirect "/")
+   (ring/redirect "/oglasi")
   )
  
 (defroutes routes
- (GET "/" [] (index true true true true true false 0))
+ (GET "/" [] (pocetna))
+ (GET "/oglasi" [] (oglasi))
+ (GET "/prijavan" [] (prijavaNestanka))
  (mp/wrap-multipart-params
- (POST "/add" [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file] (dodajNestanak vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file))
+ (POST "/add" 
+       [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt sifra pobelezja file] 
+       (dodajNestanak vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt sifra pobelezja file))
  )
- (POST "/" [idnestanka] (index false false false false false true idnestanka))
+ (POST "/pregled" [idnestanka] (pregledOglasa idnestanka))
+ (GET "/izmena/:id" [id] (izmenaNestanka id))
+ (POST "/izmena" [idnestanka] (izmenaNestanka idnestanka))
  (POST "/delete" [id zid] (obisiNestanak id zid))
  (route/resources "/"))
 
