@@ -211,7 +211,7 @@
         [:img {:src (str "img/zivotinje/" (:slika oglas)) }]
          
         [:div {:class "details"}
-        [:form { :method "get" :action "/view" :id "fileForm" :enctype "multipart/form-data"}
+        [:form { :method "post" :action "/" :id "fileForm"}
         [:input {:class "form-control" :type "hidden" :name "idnestanka" :id "idnestanka" :value (:id oglas)}] 
         [:input {:class "btn" :type "submit" :name "otvori" :value "Otvori oglas"}]
 
@@ -257,6 +257,7 @@
          [:div {:class "col-lg-6 col-md-6"}
         [:form {:action "/delete" :method "post"}
          [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
+         [:input {:type "hidden" :class "btn btn-get-started" :name "zid" :value (:zid nestanak)}]
          [:div {:class "form-group"}
           [:label {:for "sifra"}[:span {:class "req"}] "Šifra za brisanje oglasa:"] 
           [:input {:class "form-control" :type "text" :name "sifra" :required "true" :placeHolder "šifra oglasa"}]
@@ -267,6 +268,7 @@
          [:div {:class "col-lg-6 col-md-6"}
       [:form {:action "/izmena" :method "post"}
        [:input {:type "hidden" :class "btn btn-get-started" :name "id" :value (:id nestanak)}]
+       [:input {:type "hidden" :class "btn btn-get-started" :name "zid" :value (:zid nestanak)}]
         [:div {:class "form-group"}
           [:label {:for "sifra"}[:span {:class "req"}] "Šifra za izmenu oglasa:"] 
           [:input {:class "form-control" :type "text" :name "sifra" :required "true" :placeHolder "šifra oglasa"}]

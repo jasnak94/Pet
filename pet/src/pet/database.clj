@@ -42,8 +42,15 @@ from zivotinje z join vrstazivotinje vr on z.vrsta=vr.id join prijavanestanka p 
   )
 
 (defn vratiNestanak [id]
-(into [] (sql/query connection ["SELECT p.id as id, z.ime as ime, z.status as status,z.pol as pol,z.bojaDlake as bdlake, 
+(into [] (sql/query connection ["SELECT p.id as id,z.id as zid, z.ime as ime, z.status as status,z.pol as pol,z.bojaDlake as bdlake, 
 z.vrstaDlake as vdlake, z.sterilisana as ster, z.posebnaObelezja as pobelezja, z.brojcipa as brcipa, z.slika as slika , z.rasa as rasa,
 p.ulicaGrad as mesto, p.datumPrijave as datum, vr.naziv as vrsta, p.kontakt as kontakt, p.sifraoglasa as sifra 
 from zivotinje z join vrstazivotinje vr on z.vrsta=vr.id join prijavanestanka p on z.id=p.zivotinjaid where p.id=?" id]))
   )
+
+(defn obrisiNestanak [id zid]
+ (sql/delete! connection :prijavanestanka
+            ["id = ?" id])
+ (sql/delete! connection :zivotinje
+            ["id = ?" zid])
+)

@@ -34,10 +34,10 @@
 
       [:nav {:id "nav-menu-container"}
         [:ul {:class "nav-menu"}
-          [:li {:class ""}[:a {:href "#hero"} "Početna strana"]]
-           [:li [:a {:href "#about"} "O portalu"]]
-           [:li [:a {:href "#services"} "Usluge"]]
-           [:li [:a {:href "#portfolio"} "Oglasi"]]
+          [:li {:class ""}[:a {:href "/#hero"} "Početna strana"]]
+           [:li [:a {:href "/#about"} "O portalu"]]
+           [:li [:a {:href "/#services"} "Usluge"]]
+           [:li [:a {:href "/#portfolio"} "Oglasi"]]
         ]
       ]
     ]
@@ -86,12 +86,18 @@
    (ring/redirect "/")
   )
  
+ (defn obisiNestanak [id zid]
+  (db/obrisiNestanak id zid)
+   (ring/redirect "/")
+  )
+ 
 (defroutes routes
  (GET "/" [] (index true true true true true false 0))
  (mp/wrap-multipart-params
  (POST "/add" [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file] (dodajNestanak vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka pobelezja file))
  )
- (GET "/view" [idnestanka] (index false false false false false true idnestanka))
+ (POST "/" [idnestanka] (index false false false false false true idnestanka))
+ (POST "/delete" [id zid] (obisiNestanak id zid))
  (route/resources "/"))
 
 (def foo
