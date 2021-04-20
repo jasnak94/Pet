@@ -13,10 +13,6 @@
    (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavanestanka"]))
 )
 
-(defn brPronalaska []
-   (into [] (sql/query connection ["SELECT count(*) as ukupno FROM prijavapronalaska"]))
-)
-
 (defn vrstaZivotinje []
   (into [] (sql/query connection ["SELECT * FROM vrstazivotinje"]))
 )
@@ -44,7 +40,7 @@ from zivotinje z join vrstazivotinje vr on z.vrsta=vr.id join prijavanestanka p 
 (defn vratiNestanak [id]
 (into [] (sql/query connection ["SELECT p.id as id,z.id as zid, z.ime as ime, z.status as status,z.pol as pol,z.bojaDlake as bdlake, 
 z.vrstaDlake as vdlake, z.sterilisana as ster, z.posebnaObelezja as pobelezja, z.brojcipa as brcipa, z.slika as slika , z.rasa as rasa,
-p.ulicaGrad as mesto, p.datumPrijave as datum, vr.naziv as vrsta, p.kontakt as kontakt, p.sifraoglasa as sifra 
+p.ulicaGrad as mesto, p.datumPrijave as datum, vr.naziv as vrsta, vr.id as vrstaid, p.kontakt as kontakt, p.sifraoglasa as sifra 
 from zivotinje z join vrstazivotinje vr on z.vrsta=vr.id join prijavanestanka p on z.id=p.zivotinjaid where p.id=? LIMIT 1" id]))
   )
 

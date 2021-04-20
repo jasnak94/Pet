@@ -171,7 +171,7 @@
       [:label {:for "vrsta"}[:span {:class "req"}]"Vrsta životinje:"]   
       [:select {:name "vrsta" :class "form-control"}
        (map (fn [vrsta]
-         [:option {:value (:id vrsta) :selected (if (= (:id vrsta) (:vrsta nestanak )) (do "true") "false") } (:naziv vrsta)]) vrste)]
+         [:option  (if (= (:id vrsta) (:vrstaid nestanak)) (do {:value (:id vrsta) :selected "selected"}) {:value (:id vrsta)}) (:naziv vrsta)]) vrste)]
       ]
      [:div {:class "form-group"}
        [:label {:for "rasa"}[:span {:class "req"}]"Rasa:"] 
@@ -272,7 +272,6 @@
         [:div {:class "details"}
         [:div {:class "row portfolio-item" :style "padding:10px;"}
         [:div {:class "col" :style "width:60%"}
-                [:h4 (:status oglas) ]
                 [:h4 (:ime oglas) ] 
                 [:span (str (:vrsta oglas) " " (:rasa oglas))] 
                 [:h4 (str "Lokacija: " (:mesto oglas)) ]
@@ -280,7 +279,7 @@
         [:div {:class "col"  :style "width:40%"}
         [:form { :method "get" :action (str "/pregled/" (:id oglas)) :id "fileForm"}
         [:input {:class "form-control" :type "hidden" :name "idnestanka" :id "idnestanka" :value (:id oglas)}] 
-        [:input {:class "btn" :type "submit" :name "otvori" :value "Otvori oglas"}]
+        [:input {:class "btn" :type "submit" :name "otvori" :value "Prikaži"}]
 
         ]]
         ]
@@ -304,7 +303,7 @@
       [:div {:class "col-lg-6 col-md-6"}
         [:div {:class "details"}
          [:h5 "Informacije:"]
-          [:h6 (str (:vrsta nestanak) " " (:ime nestanak))]           
+           [:h6 (str (:vrsta nestanak) " " (:ime nestanak))]           
            [:h6 (str "Rasa: " (:rasa nestanak)) ] 
            [:h6 (str "Pol: " (:pol nestanak)) ] 
            [:h6 (str "Status: " (:status nestanak)) ] 
