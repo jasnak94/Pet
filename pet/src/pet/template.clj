@@ -32,18 +32,12 @@
       ]
     ]
   ]
-   [:section {:id "hero"}
-     [:div {:class "hero-container"}
-       [:h3 "Dobrodošli na portal pomoći vašim izgubljenim ljubimcima"]
-       [:h4 "Tu smo da povratimo vaše voljene drugare"]
-       [:a {:href "#about" :class "btn-get-started"} "Upoznajte se sa nama"]
-     ]
-   ]
+   
     [:main {:id "main"}
-     section
+    section
     ]
     
-    [:footer {:id "footer"}
+    [:footer {:id "footer" :style "position: fixed;bottom: 0;width: 100%;"}
     [:div {:class "footer-top"}
       [:div {:class "container"}
 

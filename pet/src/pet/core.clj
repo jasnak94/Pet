@@ -29,11 +29,13 @@
   )
 
 (defn prijavaNestanka []
-  (t/view (s/nestanak))
+  (t/view (s/nestanak nil))
   )
 
-(defn izmenaNestanka [id]
-  (t/view (s/nestanak))
+(defn izmena [id zid sifraprava sifra]
+  (if (= sifraprava sifra) (do (t/view (s/nestanak id)))
+    (ring/redirect (str "/pregled/" id)) )
+  
   )
 
 (defn upload-file [file naziv]
@@ -51,10 +53,18 @@
   (db/dodajNestanak mestonestanka kontakt sifra)
    (ring/redirect "/oglasi")
   )
- 
- (defn obisiNestanak [id zid]
-  (db/obrisiNestanak id zid)
-   (ring/redirect "/oglasi")
+ ;
+  (defn izmeniNestanak [id zid vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt sifra pobelezja imgStara]  
+  (db/izmeniZivotinju zid vrsta rasa ime pol bdlaka vdlaka brcip sterilisana 
+                     pobelezja imgStara "NESTALA")
+  (db/izmeniNestanak id zid mestonestanka kontakt sifra)
+   (ring/redirect  "/oglasi")
+  )
+  
+ (defn obisiNestanak [id zid sifraprava sifra]
+   (if (= sifraprava sifra) (do (db/obrisiNestanak id zid) 
+                              (ring/redirect "/oglasi"))
+    (ring/redirect (str "/pregled/" id)) )
   )
  
 (defroutes routes
@@ -66,10 +76,17 @@
        [vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt sifra pobelezja file] 
        (dodajNestanak vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt sifra pobelezja file))
  )
- (POST "/pregled" [idnestanka] (pregledOglasa idnestanka))
- (GET "/izmena/:id" [id] (izmenaNestanka id))
- (POST "/izmena" [idnestanka] (izmenaNestanka idnestanka))
- (POST "/delete" [id zid] (obisiNestanak id zid))
+ (GET "/pregled/:id" [id] (pregledOglasa id))
+ (GET "/izmena/:id" [id zid sifraprava sifra] (izmena id zid sifraprava sifra))
+ (mp/wrap-multipart-params
+ (POST "/izmena" [nid zid vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt 
+          sifra pobelezja imgStara]  
+     (if (= zid nil) (do (ring/redirect "/oglasiA"))
+       (izmeniNestanak nid zid vrsta rasa ime pol bdlaka vdlaka brcip sterilisana mestonestanka kontakt
+                      sifra pobelezja imgStara))
+    )
+)
+ (POST "/delete" [id zid sifraprava sifra] (obisiNestanak id zid sifraprava sifra))
  (route/resources "/"))
 
 (def foo
